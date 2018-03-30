@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 
-from . import cli
+from . import gui
 
 
 def main():
-    cli.main()
+    gui.main()
 
 
 if __name__ == '__main__':

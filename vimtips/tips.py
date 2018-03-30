@@ -2,11 +2,62 @@ import json
 import os
 import random
 import time
-from typing import cast, Any, Dict, Iterator, List, Optional, Tuple
+from typing import cast, Any, Dict, Iterator, List, NamedTuple, Optional, Tuple
 from . import sources
 
 
 DEFAULT_CACHE_LOCATION = os.path.expanduser('~/.vimtips_cache')
+
+
+TipWithTimestamp = NamedTuple('TipWithTimestamp', [('tip', str), ('timestamp', float)])
+
+
+class TipHistory:
+    class NoPreviousTipError(Exception):
+        pass
+
+    def __init__(self) -> None:
+        self._history = []  # type: List[TipWithTimestamp]
+        self._history_index = 0
+
+    def next_random_tip(self) -> TipWithTimestamp:
+        try:
+            tip_with_timestamp = random_cached_tip()
+        except Cache.ReadError:
+            renew_cache()
+            tip_with_timestamp = random_cached_tip()
+        self._history.append(tip_with_timestamp)
+        self._history_index = len(self._history)
+        return tip_with_timestamp
+
+    def previous_tip(self) -> TipWithTimestamp:
+        if self.has_previous_tip:
+            self._history_index -= 1
+            return self._history[self._history_index - 1]
+        else:
+            raise self.NoPreviousTipError
+
+    def next_tip(self) -> TipWithTimestamp:
+        if self._history_index == len(self._history):
+            return self.next_random_tip()
+        else:
+            self._history_index += 1
+            return self._history[self._history_index - 1]
+
+    @property
+    def history(self) -> List[TipWithTimestamp]:
+        return self._history
+
+    @property
+    def history_index(self) -> int:
+        return self._history_index
+
+    @property
+    def has_previous_tip(self) -> bool:
+        return self._history_index > 1
+
+    def __len__(self) -> int:
+        return len(self._history)
 
 
 class Cache:
@@ -75,10 +126,10 @@ def cached_tips() -> Tuple[List[str], float]:
     return _cache.tips, _cache.timestamp
 
 
-def random_cached_tip() -> Tuple[str, float]:
+def random_cached_tip() -> TipWithTimestamp:
     tips = _cache.tips
     random_tip = tips[random.randrange(len(tips))]
-    return random_tip, _cache.timestamp
+    return TipWithTimestamp(random_tip, _cache.timestamp)
 
 
 def renew_cache() -> None:
