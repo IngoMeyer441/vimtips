@@ -7,9 +7,24 @@ from __future__ import unicode_literals
 
 import codecs
 import os
+import runpy
 import subprocess
 from setuptools import setup, find_packages
-from vimtips._version import __version__
+
+
+def get_version_from_pyfile(version_file='vimtips/_version.py'):
+    file_globals = runpy.run_path(version_file)
+    return file_globals['__version__']
+
+
+def get_install_requires_from_requirements(requirements_filename='requirements.txt'):
+    try:
+        with codecs.open(requirements_filename, 'r', 'utf-8') as requirements_file:
+            requirements = requirements_file.readlines()
+    except OSError:
+        import logging
+        logging.warning('Could not read the requirements file.')
+    return requirements
 
 
 def get_long_description_from_readme(readme_filename='README.md'):
@@ -31,16 +46,15 @@ def get_long_description_from_readme(readme_filename='README.md'):
     return long_description
 
 
+version = get_version_from_pyfile()
 long_description = get_long_description_from_readme()
+install_requires = get_install_requires_from_requirements()
 
 setup(
     name='vimtips',
-    version=__version__,
+    version=version,
     packages=find_packages(),
-    install_requires=[
-        'PyQt5',
-        'tweepy'
-    ],
+    install_requires=install_requires,
     entry_points={
         'console_scripts': [
             'vimtips = vimtips.cli:main',
