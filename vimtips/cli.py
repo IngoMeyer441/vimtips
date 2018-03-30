@@ -2,17 +2,13 @@
 
 import sys
 from datetime import datetime
-from . import tips
+from .tips import tip_cache_box
 
 
 def print_random_tip() -> None:
-    try:
-        random_cached_tip, timestamp = tips.random_cached_tip()
-        print('Using cache, timestamp: {}'.format(datetime.fromtimestamp(timestamp).ctime()), file=sys.stderr)
-    except tips.Cache.ReadError:
-        print('No cache found -> refreshing', file=sys.stderr)
-        tips.renew_cache()
-        random_cached_tip, timestamp = tips.random_cached_tip()
+    tip_cache = tip_cache_box.tip_cache
+    random_cached_tip, timestamp = tip_cache.random_tip, tip_cache.timestamp
+    print('cache timestamp: {}'.format(datetime.fromtimestamp(timestamp).ctime()), file=sys.stderr)
     print(random_cached_tip)
 
 
