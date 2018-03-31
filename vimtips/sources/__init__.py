@@ -17,7 +17,7 @@ def load_all_tips() -> List[str]:
 def _find_plugins() -> None:
     _plugin_modules.clear()
     for importer, module_name, is_package in pkgutil.iter_modules([os.path.dirname(__file__)]):
-        if not module_name.startswith('_') and not is_package:
+        if not module_name.startswith('_'):
             module = importer.find_module(module_name).load_module(module_name)
             if hasattr(module, 'tips') and callable(module.tips):
                 _plugin_modules.append(module)

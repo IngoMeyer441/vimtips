@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
-
-from . import gui
+from . import unblank_daemon
 
 
 def main():
-    gui.main()
+    unblank_daemon.main()
 
 
 if __name__ == '__main__':
