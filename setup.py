@@ -10,6 +10,13 @@ import os
 import runpy
 import subprocess
 from setuptools import setup, find_packages
+from distutils.command.build import build
+
+
+class CustomBuild(build):
+    def run(self):
+        build.run(self)
+        subprocess.check_call(['make'], cwd='./build/lib/vimtips/unblank_check')
 
 
 def get_version_from_pyfile(version_file='vimtips/_version.py'):
@@ -55,20 +62,25 @@ setup(
     version=version,
     packages=find_packages(),
     install_requires=install_requires,
+    include_package_data=True,
     entry_points={
         'console_scripts': [
             'vimtips = vimtips.cli:main',
+            'vimtips-daemon = vimtips.unblank_daemon:main',
         ],
         'gui_scripts': [
             'vimtips-gui = vimtips.gui:main',
         ]
     },
+    cmdclass={
+        'build': CustomBuild
+    },
     author='Ingo Heimbach',
     author_email='IJ_H@gmx.de',
-    description='description',
+    description='Vim Tips is a project to aggregate and show vim tips from different sources.',
     long_description=long_description,
     license='MIT',
-    url='url',
+    url='https://github.com/IngoHeimbach/vimtips',
     keywords=['vim', 'tips'],
     classifiers=[
         'Development Status :: 4 - Beta',
