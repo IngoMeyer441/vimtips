@@ -17,8 +17,8 @@ def load_tweets(username: str) -> List[str]:
         response = requests.get(
             'https://twitter.com/i/search/timeline?q=from%3A{}&max_position={}'.format(username, cursor),
             headers={
-                'user-agent': 'mozilla/5.0',
-                'accept': 'applicaton/json'
+                'user-agent': 'Chrome/65.0',
+                'accept': 'application/json'
             }
         )
         if response.status_code != 200:
