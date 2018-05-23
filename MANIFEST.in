@@ -1,0 +1,6 @@
+include LICENSE
+include README.md
+include requirements.txt
+include vimtips/vimlogo.svg
+recursive-include vimtips/unblank_check Makefile
+recursive-include vimtips/unblank_check unblank_check.c unblank_check.sh
