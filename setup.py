@@ -11,12 +11,25 @@ import runpy
 import subprocess
 from setuptools import setup, find_packages
 from distutils.command.build import build
+try:
+    from wheel.bdist_wheel import bdist_wheel
+except ImportError:
+    bdist_wheel = None
 
 
 class CustomBuild(build):
     def run(self):
         build.run(self)
         subprocess.check_call(['make'], cwd='./build/lib/vimtips/unblank_check')
+
+
+if bdist_wheel is not None:
+    class CustomBdistWheel(bdist_wheel):
+        def finalize_options(self):
+            bdist_wheel.finalize_options(self)
+            self.root_is_pure = False  # force the build of platform specific wheels
+else:
+    CustomBdistWheel = None
 
 
 def get_version_from_pyfile(version_file='vimtips/_version.py'):
@@ -73,7 +86,8 @@ setup(
         ]
     },
     cmdclass={
-        'build': CustomBuild
+        'build': CustomBuild,
+        'bdist_wheel': CustomBdistWheel
     },
     author='Ingo Heimbach',
     author_email='IJ_H@gmx.de',
