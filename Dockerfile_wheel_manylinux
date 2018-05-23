@@ -1,0 +1,10 @@
+FROM quay.io/pypa/manylinux1_x86_64
+LABEL maintainer="Ingo Heimbach <IJ_H@gmx.de>"
+
+COPY . /vimtips
+
+WORKDIR /vimtips
+
+RUN /opt/python/cp36-cp36m/bin/python setup.py bdist_wheel
+
+CMD ["/bin/bash"]
