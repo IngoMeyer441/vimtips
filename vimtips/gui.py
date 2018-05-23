@@ -5,6 +5,7 @@ import os
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, QtSvg
 from .tips import TipHistory, tip_cache_box
+from ._version import __version__
 from typing import Any, Callable, Optional  # noqa: F401  # pylint: disable=unused-import
 
 
@@ -56,7 +57,7 @@ class TipsWidget(QtWidgets.QWidget):  # type: ignore
         self._button_layout.addWidget(self._pb_next_tip)
         self._main_layout.addLayout(self._button_layout)
         self.setLayout(self._main_layout)
-        self.setWindowTitle('vim tips')
+        self.setWindowTitle('vim tips v{}'.format(__version__))
         self.setWindowIcon(QtGui.QIcon(os.path.join(os.path.dirname(__file__), 'vimlogo.svg')))
         self.setAttribute(QtCore.Qt.WA_QuitOnClose, on=False)
 
