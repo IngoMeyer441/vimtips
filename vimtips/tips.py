@@ -12,6 +12,9 @@ TipWithTimestamp = NamedTuple('TipWithTimestamp', [('tip', str), ('timestamp', f
 
 
 class TipHistory:
+    class NoNextTipError(Exception):
+        pass
+
     class NoPreviousTipError(Exception):
         pass
 
@@ -21,10 +24,14 @@ class TipHistory:
 
     def next_random_tip(self) -> TipWithTimestamp:
         _tip_cache = tip_cache_box.tip_cache  # Read the variable only once to prevent threading problems
-        tip_with_timestamp = TipWithTimestamp(_tip_cache.random_tip, _tip_cache.timestamp)
-        self._history.append(tip_with_timestamp)
-        self._history_index = len(self._history)
-        return tip_with_timestamp
+        random_tip, timestamp = _tip_cache.random_tip, _tip_cache.timestamp
+        if random_tip is not None:
+            tip_with_timestamp = TipWithTimestamp(random_tip, timestamp)
+            self._history.append(tip_with_timestamp)
+            self._history_index = len(self._history)
+            return tip_with_timestamp
+        else:
+            raise self.NoNextTipError
 
     def previous_tip(self) -> TipWithTimestamp:
         if self.has_previous_tip:
@@ -100,9 +107,12 @@ class TipCache:
             raise self.CacheWriteError('Could not write cache file {}'.format(self._cache_location))
 
     def renew_cache(self) -> None:
-        self._tips = sources.load_all_tips()
-        self._timestamp = time.time()
-        self._write_cache()
+        tips = sources.load_all_tips()
+        if tips or self._tips is None:
+            self._tips = tips
+            self._timestamp = time.time()
+        if self._tips:
+            self._write_cache()
 
     @property
     def timestamp(self) -> float:
@@ -117,8 +127,11 @@ class TipCache:
         return cast(List[str], self._tips)
 
     @property
-    def random_tip(self) -> str:
-        random_tip = self.tips[random.randrange(len(self.tips))]
+    def random_tip(self) -> Optional[str]:
+        if len(self.tips) > 0:
+            random_tip = self.tips[random.randrange(len(self.tips))]  # type: Optional[str]
+        else:
+            random_tip = None
         return random_tip
 
 

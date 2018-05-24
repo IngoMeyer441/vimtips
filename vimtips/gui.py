@@ -66,8 +66,11 @@ class TipsWidget(QtWidgets.QWidget):  # type: ignore
         self._current_cache_update_thread = tip_cache_box.update_asynchronously(thread_type=thread_type)
 
     def next_tip(self) -> None:
-        self._la_tip.setText(self._tip_history.next_tip().tip)
-        self._pb_previous_tip.setEnabled(self._tip_history.has_previous_tip)
+        try:
+            self._la_tip.setText(self._tip_history.next_tip().tip)
+            self._pb_previous_tip.setEnabled(self._tip_history.has_previous_tip)
+        except TipHistory.NoNextTipError:
+            self._la_tip.setText('No tip available!')
 
     def previous_tip(self) -> None:
         try:
