@@ -10,7 +10,10 @@ _plugin_modules = []  # type: List[ModuleType]
 def load_all_tips() -> List[str]:
     tips = []  # type: List[str]
     for module in _plugin_modules:
-        tips.extend(module.tips())  # type: ignore
+        try:
+            tips.extend(module.tips())  # type: ignore
+        except Exception:
+            print('warning, tips from module "{}" could not be loaded!'.format(module.__file__))
     return tips
 
 

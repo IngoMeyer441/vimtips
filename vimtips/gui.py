@@ -48,16 +48,16 @@ class TipsWidget(QtWidgets.QWidget):  # type: ignore
         self._tip_layout.addWidget(self._la_tip)
         self._main_layout.addLayout(self._tip_layout)
         self._button_layout = QtWidgets.QHBoxLayout()
-        self._pb_previous_tip = QtWidgets.QPushButton('Previous tip')
+        self._pb_previous_tip = QtWidgets.QPushButton('Previous Tip')
         self._pb_previous_tip.setEnabled(self._tip_history.has_previous_tip)
         self._pb_previous_tip.clicked.connect(self.previous_tip)
         self._button_layout.addWidget(self._pb_previous_tip)
-        self._pb_next_tip = QtWidgets.QPushButton('Next tip')
+        self._pb_next_tip = QtWidgets.QPushButton('Next Tip')
         self._pb_next_tip.clicked.connect(self.next_tip)
         self._button_layout.addWidget(self._pb_next_tip)
         self._main_layout.addLayout(self._button_layout)
         self.setLayout(self._main_layout)
-        self.setWindowTitle('vim tips v{}'.format(__version__))
+        self.setWindowTitle('Vim Tips v{}'.format(__version__))
         self.setWindowIcon(QtGui.QIcon(os.path.join(os.path.dirname(__file__), 'vimlogo.svg')))
         self.setAttribute(QtCore.Qt.WA_QuitOnClose, on=False)
 
@@ -66,8 +66,11 @@ class TipsWidget(QtWidgets.QWidget):  # type: ignore
         self._current_cache_update_thread = tip_cache_box.update_asynchronously(thread_type=thread_type)
 
     def next_tip(self) -> None:
-        self._la_tip.setText(self._tip_history.next_tip().tip)
-        self._pb_previous_tip.setEnabled(self._tip_history.has_previous_tip)
+        try:
+            self._la_tip.setText(self._tip_history.next_tip().tip)
+            self._pb_previous_tip.setEnabled(self._tip_history.has_previous_tip)
+        except TipHistory.NoNextTipError:
+            self._la_tip.setText('No tip available!')
 
     def previous_tip(self) -> None:
         try:
