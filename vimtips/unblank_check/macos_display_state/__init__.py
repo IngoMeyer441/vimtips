@@ -7,8 +7,8 @@ def priority():
 
 
 def is_suitable_check():
-    return (platform.system() == 'Darwin')
+    return platform.system() == "Darwin"
 
 
 def check_executable():
-    return os.path.join(os.path.dirname(__file__), 'unblank_check')
+    return os.path.join(os.path.dirname(__file__), "unblank_check")

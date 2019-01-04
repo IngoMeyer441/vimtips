@@ -6,9 +6,9 @@ import time
 from typing import cast, Any, Callable, Dict, List, NamedTuple, Optional  # noqa: F401  # pylint: disable=unused-import
 from . import sources
 
-DEFAULT_CACHE_LOCATION = os.path.expanduser('~/.vimtips_cache')
+DEFAULT_CACHE_LOCATION = os.path.expanduser("~/.vimtips_cache")
 
-TipWithTimestamp = NamedTuple('TipWithTimestamp', [('tip', str), ('timestamp', float)])
+TipWithTimestamp = NamedTuple("TipWithTimestamp", [("tip", str), ("timestamp", float)])
 
 
 class TipHistory:
@@ -86,25 +86,25 @@ class TipCache:
 
     def _read_cache(self) -> None:
         try:
-            with open(self._cache_location, 'r') as f:
+            with open(self._cache_location, "r") as f:
                 cache_file_content = json.load(f)  # type: Dict[str, Any]
         except (IOError, json.JSONDecodeError):
-            raise self.CacheReadError('Could not load cache file {}'.format(self._cache_location))
+            raise self.CacheReadError("Could not load cache file {}".format(self._cache_location))
         try:
-            cache_timestamp = float(cache_file_content['timestamp'])
-            cache_content = [str(tip) for tip in cache_file_content['tips']]
+            cache_timestamp = float(cache_file_content["timestamp"])
+            cache_content = [str(tip) for tip in cache_file_content["tips"]]
         except (KeyError, ValueError):
-            raise self.CacheCorruptedError('The cache file {} is corrupted.'.format(self._cache_location))
+            raise self.CacheCorruptedError("The cache file {} is corrupted.".format(self._cache_location))
         self._timestamp = cache_timestamp
         self._tips = cache_content
 
     def _write_cache(self) -> None:
-        cache_content = {'timestamp': self._timestamp, 'tips': self._tips}
+        cache_content = {"timestamp": self._timestamp, "tips": self._tips}
         try:
-            with open(self._cache_location, 'w') as f:
+            with open(self._cache_location, "w") as f:
                 json.dump(cache_content, f)
         except IOError:
-            raise self.CacheWriteError('Could not write cache file {}'.format(self._cache_location))
+            raise self.CacheWriteError("Could not write cache file {}".format(self._cache_location))
 
     def renew_cache(self) -> None:
         tips = sources.load_all_tips()
