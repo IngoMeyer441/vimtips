@@ -71,6 +71,7 @@ class TipsWidget(QtWidgets.QWidget):  # type: ignore
             self._pb_previous_tip.setEnabled(self._tip_history.has_previous_tip)
         except TipHistory.NoNextTipError:
             self._la_tip.setText('No tip available!')
+        self.repaint()
 
     def previous_tip(self) -> None:
         try:
@@ -78,6 +79,7 @@ class TipsWidget(QtWidgets.QWidget):  # type: ignore
         except TipHistory.NoPreviousTipError:
             pass
         self._pb_previous_tip.setEnabled(self._tip_history.has_previous_tip)
+        self.repaint()
 
     @QtCore.pyqtSlot()  # type: ignore
     def _updated_cache(self) -> None:
