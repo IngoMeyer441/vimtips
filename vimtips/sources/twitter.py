@@ -4,7 +4,7 @@ from pyquery import PyQuery
 from typing import List
 
 
-VIMTIPS_ACCOUNTS = ["vimtips"]
+VIMTIPS_ACCOUNTS = ["vimtips", "VImTipsDaily", "vimpal", "VimTip"]
 MAX_TRIES = 5
 WAIT_TIME_BETWEEN_TRIES = 10  # seconds
 
