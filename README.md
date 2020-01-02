@@ -2,7 +2,7 @@
 
 ## Introduction
 
-![screenshot](https://raw.githubusercontent.com/IngoHeimbach/vimtips/master/screenshot.png)
+<img src="https://raw.githubusercontent.com/IngoHeimbach/vimtips/master/screenshot.png" width="540" />
 
 *Vim Tips* is a project to aggregate and show vim tips from different sources. A small daemon waits for screen unlocks
 and automatically starts the vim tips gui if it is the first unlock of the day.
@@ -38,21 +38,24 @@ a new app and add a bash script which starts `vimtips-daemon`. The created app c
 
 ## Tip sources
 
-Currently, only twitter is supported as a tip source (the [vimtips account](https://twitter.com/vimtips?lang=en) is
-read) but new sources can be added by creating a new Python module in `vimtips/sources`. Look at
+Currently, only twitter is supported as a tip source (the [vimtips](https://twitter.com/vimtips?lang=en),
+[VImTipsDaily](https://twitter.com/VImTipsDaily?lang=en), [vimpal](https://twitter.com/vimpal?lang=en) and
+[VimTip](https://twitter.com/vimpal?lang=en) accounts are read) but new sources can be added by creating a new Python
+module in `vimtips/sources`. Look at
 [vimtips/sources/twitter.py](https://raw.githubusercontent.com/IngoHeimbach/vimtips/master/vimtips/sources/twitter.py)
 for an example. You only need to implement a global function `tips` which returns a list of strings.
 
 ## Screen unlock detection
 
-This package has different backends to detect a screen unlock:
+This package has different backends to detect a screen unlock and automatically chooses an appropriate one:
 
 - Linux:
   - `xscreensaver`: If `xscreensaver` is running, it will be asked for unlock events.
-  - `X11 dpms`: As a fallback dpms events are watched which should work on every Linux desktop. However, this backend
+  - `gnome-screensaver` and `xfce4-screensaver`: Can also be asked for unlock events.
+  - `X11 dpms`: As a fallback, dpms events are watched which should work on every Linux desktop. However, this backend
     does not really check for a screen unlock, it checks the screen power state instead (however, in most configurations
     the screen is sent to sleep when the screen is locked, so this should be fine on most systems). This backend could
     fail if screensavers are used.
 - macos:
-  - On macos, the screen power state is watched similiar to the Linux X11 backend. If anyone knows how to check for a
+  - On macos, the screen power state is watched similar to the Linux X11 backend. If anyone knows how to check for a
     screen lock, please send a pull request! :)
