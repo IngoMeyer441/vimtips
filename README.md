@@ -23,6 +23,13 @@ can install these dependencies with:
 apt install build-essential libx11-dev nx-x11proto-xext-dev
 ```
 
+If you run an Arch-bases system, you can also install `vimtips` from the
+[AUR](https://aur.archlinux.org/packages/vimtips/):
+
+```bash
+yay -S vimtips
+```
+
 ## Usage
 
 After installation, you get the new commands `vimtips-gui` and `vimtips-daemon` to start the graphical application or
