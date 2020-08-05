@@ -2,7 +2,7 @@
 
 ## Introduction
 
-<img src="https://raw.githubusercontent.com/IngoHeimbach/vimtips/master/screenshot.png" width="540" />
+<img src="https://raw.githubusercontent.com/IngoMeyer441/vimtips/master/screenshot.png" width="540" />
 
 *Vim Tips* is a project to aggregate and show vim tips from different sources. A small daemon waits for screen unlocks
 and automatically starts the vim tips gui if it is the first unlock of the day.
@@ -49,7 +49,7 @@ Currently, only twitter is supported as a tip source (the [vimtips](https://twit
 [VImTipsDaily](https://twitter.com/VImTipsDaily?lang=en), [vimpal](https://twitter.com/vimpal?lang=en) and
 [VimTip](https://twitter.com/vimpal?lang=en) accounts are read) but new sources can be added by creating a new Python
 module in `vimtips/sources`. Look at
-[vimtips/sources/twitter.py](https://raw.githubusercontent.com/IngoHeimbach/vimtips/master/vimtips/sources/twitter.py)
+[vimtips/sources/twitter.py](https://raw.githubusercontent.com/IngoMeyer441/vimtips/master/vimtips/sources/twitter.py)
 for an example. You only need to implement a global function `tips` which returns a list of strings.
 
 ## Screen unlock detection
