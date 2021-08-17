@@ -33,17 +33,6 @@ def get_version_from_pyfile(version_file="vimtips/_version.py"):
     return file_globals["__version__"]
 
 
-def get_install_requires_from_requirements(requirements_filename="requirements.txt"):
-    try:
-        with open(requirements_filename, "r", encoding="utf-8") as requirements_file:
-            requirements = requirements_file.readlines()
-    except OSError:
-        import logging
-
-        logging.warning("Could not read the requirements file.")
-    return requirements
-
-
 def get_long_description_from_readme(readme_filename="README.md"):
     long_description = None
     if os.path.isfile(readme_filename):
@@ -54,27 +43,26 @@ def get_long_description_from_readme(readme_filename="README.md"):
 
 version = get_version_from_pyfile()
 long_description = get_long_description_from_readme()
-install_requires = get_install_requires_from_requirements()
 
 setup(
     name="vimtips",
     version=version,
     packages=find_packages(),
     python_requires="~=3.3",
-    install_requires=install_requires,
+    install_requires=["PyQt5", "pyquery", "requests", "psutil"],
     include_package_data=True,
     entry_points={
         "console_scripts": ["vimtips = vimtips.cli:main", "vimtips-daemon = vimtips.unblank_daemon:main"],
         "gui_scripts": ["vimtips-gui = vimtips.gui:main"],
     },
     cmdclass={"build": CustomBuild, "bdist_wheel": CustomBdistWheel},
-    author="Ingo Heimbach",
-    author_email="IJ_H@gmx.de",
+    author="Ingo Meyer",
+    author_email="IJ_M@gmx.de",
     description="Vim Tips is a project to aggregate and show vim tips from different sources.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="MIT",
-    url="https://github.com/IngoHeimbach/vimtips",
+    url="https://github.com/IngoMeyer441/vimtips",
     keywords=["vim", "tips"],
     classifiers=[
         "Development Status :: 4 - Beta",

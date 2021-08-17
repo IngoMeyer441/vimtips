@@ -145,7 +145,8 @@ class TipCacheBox:
         def job_function() -> None:
             tip_cache = TipCache()
             tip_cache.renew_cache()
-            self._tip_cache = tip_cache
+            if tip_cache.tips:
+                self._tip_cache = tip_cache
 
         thread = thread_type(target=job_function)
         thread.start()
